@@ -1,0 +1,509 @@
+  <ManagementPack SchemaVersion="2.0" ContentReadable="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <Manifest>
+      <Identity>
+        <ID>SampleDashboardwithRainbowBarColumnsStateWidgetOnly</ID>
+        <Version>1.0.0.28</Version>
+      </Identity>
+      <Name>SampleDashboardwithRainbowBarColumnsStateWidgetOnly</Name>
+      <References>
+        <Reference Alias="EX15Dash">
+          <ID>Microsoft.Exchange.15.Visualization.Components</ID>
+          <Version>1.1.108.91</Version>
+          <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+        </Reference>
+        <Reference Alias="SC">
+          <ID>Microsoft.SystemCenter.Library</ID>
+          <Version>7.0.8433.0</Version>
+          <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+        </Reference>
+        <Reference Alias="MSVCL">
+          <ID>Microsoft.SystemCenter.Visualization.Component.Library</ID>
+          <Version>7.1.10226.1011</Version>
+          <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+        </Reference>
+        <Reference Alias="System">
+          <ID>System.Library</ID>
+          <Version>7.5.8501.0</Version>
+          <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+        </Reference>
+        <Reference Alias="Visualization">
+          <ID>Microsoft.SystemCenter.Visualization.Library</ID>
+          <Version>7.1.10139.0</Version>
+          <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+        </Reference>
+      </References>
+    </Manifest>
+    <Presentation>
+      <ComponentTypes>
+        <ComponentType ID="SampleGridLayoutWith2Cells" Base="Visualization!Microsoft.SystemCenter.Visualization.GridLayoutConfigBase" Accessibility="Internal" />
+        <ComponentType ID="SampleRainbowBarColumnsSummaryDashboard" Base="Visualization!Microsoft.SystemCenter.Visualization.GridLayout" Accessibility="Internal" Lifetime="ManagementPackElement"></ComponentType>
+        <ComponentType ID="SampleStateWidgetwithRainbowBarColumns" Accessibility="Internal" Base="InternalStateWidget.RainbowBarColumns" Lifetime="ManagementPackElement"></ComponentType>
+        <ComponentType ID="InternalStateWidget.RainbowBarColumns" Accessibility="Public">
+          <Property Name="AutoRefreshTickInterval" Type="xsd://int">
+            <SimpleValue Type="xsd://integer" Value="30" />
+          </Property>
+          <Property Name="Script" Type="xsd://string" BindingDirection="Both" />
+          <Property Name="SelectedRow" Type="BaseDataType[]" BindingDirection="Out" />
+          <Property Name="IsBusy" Type="BaseDataType" BindingDirection="Out" />
+          <Property Name="LastError" Type="BaseDataType" BindingDirection="Out" />
+          <Property Name="ShowSearchBar" Type="xsd://boolean" BindingDirection="In">
+            <SimpleValue Type="xsd://boolean" Value="True" />
+          </Property>
+        </ComponentType>
+        <ComponentType ID="InternalStateWidget.RainbowBarColumns.ActionsHost" Accessibility="Internal">
+          <Property Name="ContentElement" Type="BaseDataType" BindingDirection="In" />
+          <Property Name="ActionTypes" Type="xsd://string[]" BindingDirection="Out" />
+          <Property Name="Action" Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ActionTypes/Action" BindingDirection="Out" />
+        </ComponentType>
+        <ComponentType ID="InternalStateWidget.RainbowBarColumns.TriggeredComponentHost" Accessibility="Internal">
+          <Property Name="ComponentType" Type="xsd://string" BindingDirection="In" />
+          <Property Name="ComponentTarget" Type="BaseDataType" BindingDirection="In" />
+          <Property Name="TriggerInstance" Type="BaseDataType" BindingDirection="In" />
+          <Property Name="TriggerTypes" Type="xsd://string[]" BindingDirection="In" />
+        </ComponentType>
+        <ComponentType ID="InternalStateWidget.RainbowBarColumns.Common.DataGridColumnsToPropertyNames" Accessibility="Public">
+          <Property Name="Columns" Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn[]" BindingDirection="In" />
+          <Property Name="GroupedColumns" Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataCollectionViewColumn[]" BindingDirection="In" />
+          <Property Name="SortedColumns" Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataCollectionViewColumn[]" BindingDirection="In" />
+          <Property Name="PropertyNames" Type="xsd://string[]" BindingDirection="Both" />
+        </ComponentType>
+      </ComponentTypes>
+      <ComponentReferences>
+        <ComponentReference ID="SampleRainbowBarColumnsSummaryDashboard.Reference" TypeID="SampleRainbowBarColumnsSummaryDashboard" Parent="SC!Microsoft.SystemCenter.Monitoring.ViewFolder.Root" Accessibility="Internal" />
+        <ComponentReference ID="SampleStateWidgetwithRainbowBarColumns.Reference" TypeID="SampleStateWidgetwithRainbowBarColumns" Parent="SampleRainbowBarColumnsSummaryDashboard" Accessibility="Internal" />
+      </ComponentReferences>
+      <ComponentImplementations>
+        <ComponentImplementation ID="SampleGridLayoutWith2Cells.ComponentImplementation" TypeId="SampleGridLayoutWith2Cells" Platform="All" Accessibility="Internal">
+          <Composite>
+            <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.GridLayoutGenericConfig">
+              <Binding PropertyId="CellDefinitions">
+                <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.LayoutConfig/CellDefinition[]">
+                  <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.LayoutConfig/CellDefinition">
+                    <Binding PropertyId="Row">
+                      <SimpleValue Type="xsd://int" Value="0" />
+                    </Binding>
+                    <Binding PropertyId="RowSpan">
+                      <SimpleValue Type="xsd://int" Value="10" />
+                    </Binding>
+                    <Binding PropertyId="Column">
+                      <SimpleValue Type="xsd://int" Value="0" />
+                    </Binding>
+                    <Binding PropertyId="ColumnSpan">
+                      <SimpleValue Type="xsd://int" Value="10" />
+                    </Binding>
+                  </ComplexValue>
+                </ComplexValueCollection>
+              </Binding>
+            </Component>
+          </Composite>
+        </ComponentImplementation>
+        <ComponentImplementation ID="SampleRainbowBarColumnsSummaryDashboard.ComponentImplementation" TypeId="SampleRainbowBarColumnsSummaryDashboard" Accessibility="Public" Platform="Wpf, Silverlight">
+          <Composite>
+            <Variable Id="SelectedEntities" Type="BaseDataType[]" />
+            <Variable Id="Item" Type="BaseDataType[]" />
+            <Base>
+              <Binding PropertyId="ConfigType">
+                <SimpleValue Type="xsd://string" Value="SampleDashboardwithRainbowBarColumnsStateWidgetOnly!SampleGridLayoutWith2Cells" />
+              </Binding>
+              <Binding PropertyId="CellRegionMappings">
+                <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.LayoutConfig/CellRegionMapping[]">
+                  <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.LayoutConfig/CellRegionMapping">
+                    <Binding PropertyId="RegionContent">
+                      <SimpleValue Type="xsd://string" Value="SampleDashboardwithRainbowBarColumnsStateWidgetOnly!SampleStateWidgetwithRainbowBarColumns" />
+                    </Binding>
+                    <Binding PropertyId="RegionId">
+                      <SimpleValue Type="xsd://string" Value="StateWidgetwithRainbowBars" />
+                    </Binding>
+                    <Binding PropertyId="RegionParameters">
+                      <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.LayoutConfig/HostedRequestParameter[]">
+                        <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.LayoutConfig/HostedRequestParameter">
+                          <Binding PropertyId="Name">
+                            <SimpleValue Type="xsd://string" Value="SyncEntities" />
+                          </Binding>
+                          <Binding PropertyId="Value">
+                            <Reference>$Variable/SelectedEntities$</Reference>
+                          </Binding>
+                        </ComplexValue>
+                      </ComplexValueCollection>
+                    </Binding>
+                    <Binding PropertyId="CellIndex">
+                      <SimpleValue Type="xsd://int" Value="0" />
+                    </Binding>
+                  </ComplexValue>
+                </ComplexValueCollection>
+              </Binding>
+              <Binding PropertyId="ComponentDefinitionIsReadOnly">
+                <SimpleValue Type="xsd://boolean" Value="True" />
+              </Binding>
+            </Base>
+          </Composite>
+        </ComponentImplementation>
+        <ComponentImplementation ID="SampleStateWidgetwithRainbowBarColumns.ComponentImplementation" TypeId="SampleStateWidgetwithRainbowBarColumns" Accessibility="Internal" Platform="Wpf, Silverlight">
+          <Composite>
+            <Base>
+              <Binding PropertyId="ShowSearchBar">
+                <SimpleValue Type="xsd://boolean" Value="True" />
+              </Binding>
+              <Binding PropertyId="Script">
+                <SimpleValue Type="xsd://string" Value="&#xD;&#xA;$WindowsServerClass = Get-SCOMClass -Name &quot;Microsoft.Windows.Server.Computer&quot;&#xD;&#xA;$serverObjects = Get-SCOMClassInstance -class $WindowsServerClass&#xD;&#xA;&#xD;&#xA; $dataObjects = @() &#xD;&#xA;&#xD;&#xA;$yellow = [double]0&#xD;&#xA;$green = [double]0&#xD;&#xA;$red   = [double]0&#xD;&#xA;$gray   = [double]0&#xD;&#xA;$white   = [double]0&#xD;&#xA;$all   = [double]0&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;foreach ($serverObject in $serverObjects) { &#xD;&#xA; $dataObject = $ScriptContext.CreateFromObject($serverObject, &quot;Id=Id,HealthState=HealthState,Name=Name&quot;, $null) &#xD;&#xA;&#xD;&#xA;if ($dataObject -ne $null)  {     &#xD;&#xA;&#xD;&#xA;$relatedItems = $serverObject.GetRelatedMonitoringObjects()&#xD;&#xA;&#xD;&#xA;    foreach ($relatedItem in $relatedItems) &#xD;&#xA;    { &#xD;&#xA;        If($relatedItem.HealthState.toString() -eq &quot;Success&quot;){$green++}&#xD;&#xA;        ElseIf($relatedItem.HealthState.toString() -eq &quot;Warning&quot;){$yellow++}&#xD;&#xA;        ElseIf($relatedItem.HealthState.toString() -eq &quot;Error&quot;){$red++}&#xD;&#xA;        ElseIf($relatedItem.HealthState.toString() -eq &quot;Uninitialized&quot;){$gray++}&#xD;&#xA;  Else&#xD;&#xA;  {&#xD;&#xA;   If($relatedItem.IsAvailable -ne $True){$white++}&#xD;&#xA;  }&#xD;&#xA;    } &#xD;&#xA;&#xD;&#xA;$Overallstat = $ScriptContext.CreateInstance(&quot;RAINBOWDATA&quot;)  &#xD;&#xA;  $Overallstat[&quot;GreenValue&quot;] = $green&#xD;&#xA;  $Overallstat[&quot;YellowValue&quot;] = $yellow&#xD;&#xA;  $Overallstat[&quot;RedValue&quot;] = $red&#xD;&#xA;$Overallstat[&quot;GrayValue&quot;] = $gray   &#xD;&#xA;  $Overallstat[&quot;Sum&quot;] = $relatedItems.count&#xD;&#xA;&#xD;&#xA;  &#xD;&#xA;  $dataObject[&quot;TotalRelatedObjectField&quot;] = &quot;TotalRelatedObjects:&quot; &#xD;&#xA;  $dataObject[&quot;AppPoolCount&quot;] = $Overallstat &#xD;&#xA;&#xD;&#xA;  $dataObject[&quot;CriticalRelatedObjectField&quot;] = &quot;InCritical:&quot; &#xD;&#xA;$Criticalstat = $ScriptContext.CreateInstance(&quot;RAINBOWDATA&quot;) &#xD;&#xA;$Criticalstat[&quot;RedValue&quot;] = $red  &#xD;&#xA;$dataObject[&quot;HealthStateCritical&quot;] = $Criticalstat &#xD;&#xA;  &#xD;&#xA;  $dataObject[&quot;WarningRelatedObjectField&quot;] = &quot;InWarning:&quot; &#xD;&#xA;$Warningstat = $ScriptContext.CreateInstance(&quot;RAINBOWDATA&quot;) &#xD;&#xA;$Warningstat[&quot;YellowValue&quot;] = $yellow  &#xD;&#xA;$dataObject[&quot;HealthStateWarning&quot;] = $Warningstat &#xD;&#xA;&#xD;&#xA;  $dataObject[&quot;HealthyRelatedObjectField&quot;] = &quot;Healthy:&quot; &#xD;&#xA;$Healthystat = $ScriptContext.CreateInstance(&quot;RAINBOWDATA&quot;) &#xD;&#xA;$Healthystat[&quot;GreenValue&quot;] = $green  &#xD;&#xA;$dataObject[&quot;HealthStateHealthy&quot;] = $Healthystat &#xD;&#xA;&#xD;&#xA;  $dataObject[&quot;GrayRelatedObjectField&quot;] = &quot;NotMonitored:&quot; &#xD;&#xA;$Graystat = $ScriptContext.CreateInstance(&quot;RAINBOWDATA&quot;) &#xD;&#xA;$Graystat[&quot;GrayValue&quot;] = $gray  &#xD;&#xA;$dataObject[&quot;HealthStateGray&quot;] = $Graystat &#xD;&#xA;  &#xD;&#xA;$white   = [double]0    &#xD;&#xA;$gray   = [double]0    &#xD;&#xA;$yellow = [double]0&#xD;&#xA;$green = [double]0&#xD;&#xA;$red   = [double]0&#xD;&#xA;$all   = [double]0&#xD;&#xA;  &#xD;&#xA;  }&#xD;&#xA;&#xD;&#xA;  $dataObjects += $dataObject       &#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;foreach ($dataObject in $dataObjects) &#xD;&#xA; { &#xD;&#xA; $ScriptContext.ReturnCollection.Add($dataObject) &#xD;&#xA; }&#xD;&#xA;&#xD;&#xA;" />
+              </Binding>
+            </Base>
+          </Composite>
+        </ComponentImplementation>               
+        <ComponentImplementation ID="InternalStateWidget.RainbowBarColumns.ComponentImplementation" TypeId="InternalStateWidget.RainbowBarColumns" Platform="All" Accessibility="Internal">
+          <Composite>
+            <Variable Id="ActionHostActions" Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ActionTypes/Action" />
+            <Variable Id="FilterCriteria" Type="BaseDataType" />
+            <Variable Id="FilterPropertyNames" Type="xsd://string[]" />
+            <Variable Id="LocalSelectedItems" Type="BaseDataType[]" />
+            <Variable Id="GlobalSelectedItems" Type="BaseDataType[]" />
+            <Variable Id="SelectedGridItem" Type="BaseDataType" />
+            <Variable Id="DataGridActions" Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ActionTypes/Action" />
+            <Variable Id="VisualizedDataCount" Type="xsd://int" />
+            <Variable Id="SortedColumns" Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn[]">
+              <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataCollectionViewColumn[]">
+                <ComplexValue Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataCollectionViewColumn">
+                  <Binding PropertyId="PropertyName">
+                    <SimpleValue Type="xsd://string" Value="HealthState" />
+                  </Binding>
+                  <Binding PropertyId="HeaderDisplayObject">
+                    <SimpleValue Type="xsd://string" Value="$MPReference/Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.Library.Entity.HealthState/DisplayName$" />
+                  </Binding>
+                  <Binding PropertyId="SortDirection">
+                    <SimpleValue Type="xsd://string" Value="Descending" />
+                  </Binding>
+                  <Binding PropertyId="XPath">
+                    <SimpleValue Type="xsd://string" Value="$Object/Property[Name='HealthState']$" />
+                  </Binding>
+                  <Binding PropertyId="SourceType">
+                    <SimpleValue Type="xsd://string" Value="ManagedEntity" />
+                  </Binding>
+                </ComplexValue>
+              </ComplexValueCollection>
+            </Variable>
+            <Variable Id="AutoRefreshAction" Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ActionTypes/AutoRefreshAction" />
+            <Variable Id="ConsolidatedRefreshAction" Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ActionTypes/RefreshAction" />
+            <Variable Id="DataSourceOutput" Type="BaseDataType[]" />
+            <Variable Id="GeneratedColumns" Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ColumnType/DataGridColumn[]" />
+            <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.ComponentContainer">
+              <Binding PropertyId="Visual">
+                <Component TypeId="InternalStateWidget.RainbowBarColumns.ActionsHost">
+                  <Binding PropertyId="ActionTypes">
+                    <SimpleValue Type="xsd://string" Value="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ActionTypes/ShowFilterAction" />
+                  </Binding>
+                  <Binding PropertyId="Action">
+                    <Reference>$Variable/ActionHostActions$</Reference>
+                  </Binding>
+                  <Binding PropertyId="ContentElement">
+                    <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.LayoutGrid">
+                      <Binding PropertyId="RowCollection">
+                        <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.LayoutGridRow">
+                          <Binding PropertyId="Height">
+                            <SimpleValue Type="xsd://string" Value="Auto" />
+                          </Binding>
+                        </Component>
+                      </Binding>
+                      <Binding PropertyId="RowCollection">
+                        <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.LayoutGridRow">
+                          <Binding PropertyId="Height">
+                            <SimpleValue Type="xsd://string" Value="*" />
+                          </Binding>
+                        </Component>
+                      </Binding>
+                      <Binding PropertyId="ColumnCollection">
+                        <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.LayoutGridColumn">
+                          <Binding PropertyId="Width">
+                            <SimpleValue Type="xsd://string" Value="*" />
+                          </Binding>
+                        </Component>
+                      </Binding>
+                      <Binding PropertyId="CellCollection">
+                        <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.LayoutGridCell">
+                          <Binding PropertyId="RowId">
+                            <SimpleValue Type="xsd://string" Value="0" />
+                          </Binding>
+                          <Binding PropertyId="ColumnId">
+                            <SimpleValue Type="xsd://string" Value="0" />
+                          </Binding>
+                          <Binding PropertyId="Content">
+                            <Component TypeId="EX15Dash!Microsoft.Exchange.15.Visualization.Components.Common.WidgetFilterControl">
+                              <Binding PropertyId="Criteria">
+                                <Reference>$Variable/FilterCriteria$</Reference>
+                              </Binding>
+                              <Binding PropertyId="FilterActions">
+                                <Reference>$Variable/ActionHostActions$</Reference>
+                              </Binding>
+                              <Binding PropertyId="ControlIsVisible">
+                                <Reference>$Property/ShowSearchBar$</Reference>
+                              </Binding>
+                            </Component>
+                          </Binding>
+                        </Component>
+                      </Binding>
+                      <Binding PropertyId="CellCollection">
+                        <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.LayoutGridCell">
+                          <Binding PropertyId="RowId">
+                            <SimpleValue Type="xsd://string" Value="1" />
+                          </Binding>
+                          <Binding PropertyId="ColumnId">
+                            <SimpleValue Type="xsd://string" Value="0" />
+                          </Binding>
+                          <Binding PropertyId="Content">
+                            <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.DataGrid">
+                              <Binding PropertyId="Data">
+                                <Reference>$Variable/DataSourceOutput$</Reference>
+                              </Binding>
+                              <Binding PropertyId="SelectionMode">
+                                <SimpleValue Type="xsd://string" Value="SingleRowSelect" />
+                              </Binding>
+                              <Binding PropertyId="SelectedRows">
+                                <Reference>$Variable/LocalSelectedItems$</Reference>
+                              </Binding>
+                              <Binding PropertyId="SelectedRow">
+                                <Reference>$Variable/SelectedGridItem$</Reference>
+                              </Binding>
+                              <Binding PropertyId="Action">
+                                <Reference>$Variable/DataGridActions$</Reference>
+                              </Binding>
+                              <Binding PropertyId="ItemsCount">
+                                <Reference>$Variable/VisualizedDataCount$</Reference>
+                              </Binding>
+                              <Binding PropertyId="AutoSelect">
+                                <SimpleValue Type="xsd://boolean" Value="False" />
+                              </Binding>
+                              <Binding PropertyId="KeyPropertyName">
+                                <SimpleValue Type="xsd://string" Value="Id" />
+                              </Binding>
+                              <Binding PropertyId="ColumnHeaderVisible">
+                                <SimpleValue Type="xsd://boolean" Value="False" />
+                              </Binding>
+                              <Binding PropertyId="CanReorderColumns">
+                                <SimpleValue Type="xsd://boolean" Value="True" />
+                              </Binding>
+                              <Binding PropertyId="CellComponentType">
+                                <SimpleValue Type="xsd://string" Value="Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.DataGridGenericCell" />
+                              </Binding>
+                              <Binding PropertyId="ColumnHeaderComponentType">
+                                <SimpleValue Type="xsd://string" Value="Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.DataGridColumnHeaderCell" />
+                              </Binding>
+                              <Binding PropertyId="Columns">
+                                <Reference>$Variable/GeneratedColumns$</Reference>
+                              </Binding>
+                              <Binding PropertyId="SortedColumns">
+                                <Reference>$Variable/SortedColumns$</Reference>
+                              </Binding>
+                              <Binding PropertyId="Filter">
+                                <Component TypeId="EX15Dash!Microsoft.Exchange.15.Visualization.Components.Common.SmartFilter">
+                                  <Binding PropertyId="Criteria">
+                                    <Reference>$Variable/FilterCriteria$</Reference>
+                                  </Binding>
+                                  <Binding PropertyId="PropertyNames">
+                                    <Reference>$Variable/FilterPropertyNames$</Reference>
+                                  </Binding>
+                                </Component>
+                              </Binding>
+                            </Component>
+                          </Binding>
+                        </Component>
+                      </Binding>
+                    </Component>
+                  </Binding>
+                </Component>
+              </Binding>
+              <Binding PropertyId="Objects">
+                <Component TypeId="MSVCL!Microsoft.SystemCenter.Visualization.Component.Library.SelectedItemFilter">
+                  <Binding PropertyId="LocalSelectedItems">
+                    <Reference>$Variable/LocalSelectedItems$</Reference>
+                  </Binding>
+                  <Binding PropertyId="GlobalSelectedItems">
+                    <Reference>$Variable/GlobalSelectedItems$</Reference>
+                  </Binding>
+                </Component>
+              </Binding>
+              <Binding PropertyId="Objects">
+                <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.OneWaySync">
+                  <Binding PropertyId="From">
+                    <Reference>$Variable/LocalSelectedItems$</Reference>
+                  </Binding>
+                  <Binding PropertyId="To">
+                    <Reference>$Property/SelectedRow$</Reference>
+                  </Binding>
+                </Component>
+              </Binding>
+              <Binding PropertyId="Objects">
+                <Component TypeId="InternalStateWidget.RainbowBarColumns.TriggeredComponentHost">
+                  <Binding PropertyId="ComponentType">
+                    <SimpleValue Type="xsd://string" Value="Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ManagedEntityPropertyTask" />
+                  </Binding>
+                  <Binding PropertyId="ComponentTarget">
+                    <Reference>$Variable/SelectedGridItem$</Reference>
+                  </Binding>
+                  <Binding PropertyId="TriggerInstance">
+                    <Reference>$Variable/DataGridActions$</Reference>
+                  </Binding>
+                  <Binding PropertyId="TriggerTypes">
+                    <SimpleValue Type="xsd://string" Value="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.ActionTypes/ItemPropertiesAction" />
+                  </Binding>
+                </Component>
+              </Binding>
+              <Binding PropertyId="Objects">
+                <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.OneWaySync">
+                  <Binding PropertyId="From">
+                    <Reference>$Variable/VisualizedDataCount$</Reference>
+                  </Binding>
+                  <Binding PropertyId="To">
+                    <Reference>$Service/Subtitle$</Reference>
+                  </Binding>
+                </Component>
+              </Binding>
+              <Binding PropertyId="Objects">
+                <Component TypeId="EX15Dash!Microsoft.Exchange.15.Visualization.Components.Common.DataObjectColumnGenerator">
+                  <Binding PropertyId="InputCollection">
+                    <Reference>$Variable/DataSourceOutput$</Reference>
+                  </Binding>
+                  <Binding PropertyId="ColumnCollection">
+                    <Reference>$Variable/GeneratedColumns$</Reference>
+                  </Binding>
+                  <Binding PropertyId="DataObjectName">
+                    <SimpleValue Type="xsd://string" Value="Exchange.15.Visualization.ServerGridData" />
+                  </Binding>
+                </Component>
+              </Binding>
+              <Binding PropertyId="Objects">
+                <Component TypeId="InternalStateWidget.RainbowBarColumns.Common.DataGridColumnsToPropertyNames">
+                  <Binding PropertyId="Columns">
+                    <Reference>$Variable/GeneratedColumns$</Reference>
+                  </Binding>
+                  <Binding PropertyId="SortedColumns">
+                    <Reference>$Variable/SortedColumns$</Reference>
+                  </Binding>
+                  <Binding PropertyId="PropertyNames">
+                    <Reference>$Variable/FilterPropertyNames$</Reference>
+                  </Binding>
+                </Component>
+              </Binding>
+              <Binding PropertyId="Objects">
+                <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.AutoRefreshTimer">
+                  <Binding PropertyId="TickInterval">
+                    <Reference>$Property/AutoRefreshTickInterval$</Reference>
+                  </Binding>
+                  <Binding PropertyId="AutoRefreshAction">
+                    <Reference>$Variable/AutoRefreshAction$</Reference>
+                  </Binding>
+                </Component>
+              </Binding>
+              <Binding PropertyId="Objects">
+                <Component TypeId="Visualization!Microsoft.SystemCenter.Visualization.Consolidator">
+                  <Binding PropertyId="From1">
+                    <Reference>$Variable/AutoRefreshAction$</Reference>
+                  </Binding>
+                  <Binding PropertyId="From2">
+                    <Reference>$Service/RefreshAction$</Reference>
+                  </Binding>
+                  <Binding PropertyId="To">
+                    <Reference>$Variable/ConsolidatedRefreshAction$</Reference>
+                  </Binding>
+                </Component>
+              </Binding>
+              <Binding PropertyId="Objects">
+                <Component TypeId="MSVCL!Microsoft.SystemCenter.Visualization.Component.Library.PowershellDataSource">
+                  <Binding PropertyId="DataTypes">
+                    <ComplexValueCollection Type="xsd://Microsoft.SystemCenter.Visualization.Library!Microsoft.SystemCenter.Visualization.DataSourceTypes/DataTypeSpecifier[]"></ComplexValueCollection>
+                  </Binding>
+                  <Binding PropertyId="Script">
+                    <Reference>$Property/Script$</Reference>
+                  </Binding>
+                  <Binding PropertyId="Modules">
+                    <SimpleValue Type="xsd://string" Value="OperationsManager" />
+                  </Binding>
+                  <Binding PropertyId="KeyProperty">
+                    <SimpleValue Type="xsd://string" Value="Id" />
+                  </Binding>
+                  <Binding PropertyId="Output">
+                    <Reference>$Variable/DataSourceOutput$</Reference>
+                  </Binding>
+                  <Binding PropertyId="Refresh">
+                    <Reference>$Variable/ConsolidatedRefreshAction$</Reference>
+                  </Binding>
+                </Component>
+              </Binding>
+            </Component>
+          </Composite>
+        </ComponentImplementation>
+        <ComponentImplementation ID="InternalStateWidget.RainbowBarColumns.ActionsHost.ComponentImplementation" TypeId="InternalStateWidget.RainbowBarColumns.ActionsHost" Platform="Wpf, Silverlight" Accessibility="Public">
+          <Unit>
+            <ContractFactory>Microsoft.EnterpriseManagement.Presentation.Controls.CommonControls.Actions.ActionsHost</ContractFactory>
+            <Property Name="CompositionEngineDataContext" Direction="In">
+              <Reference>$DataContext$</Reference>
+            </Property>
+            <Property Name="ContentElement" Direction="In">
+              <Reference>$Property/ContentElement$</Reference>
+            </Property>
+            <Property Name="Action" Direction="Out">
+              <Reference>$Property/Action$</Reference>
+            </Property>
+            <Property Name="ActionTypes" Direction="Out">
+              <Reference>$Property/ActionTypes$</Reference>
+            </Property>
+          </Unit>
+        </ComponentImplementation>
+        <ComponentImplementation ID="InternalStateWidget.RainbowBarColumns.TriggeredComponentHost.ComponentImplementation" TypeId="InternalStateWidget.RainbowBarColumns.TriggeredComponentHost" Platform="Wpf, Silverlight" Accessibility="Internal">
+          <Unit>
+            <ContractFactory>Microsoft.EnterpriseManagement.Presentation.Controls.CommonControls.TriggeredComponentHost</ContractFactory>
+            <Property Name="EngineDataContext" Direction="In">
+              <Reference>$DataContext$</Reference>
+            </Property>
+            <Property Name="ComponentType" Direction="In">
+              <Reference>$Property/ComponentType$</Reference>
+            </Property>
+            <Property Name="ComponentTarget" Direction="In">
+              <Reference>$Property/ComponentTarget$</Reference>
+            </Property>
+            <Property Name="TriggerInstance" Direction="In">
+              <Reference>$Property/TriggerInstance$</Reference>
+            </Property>
+            <Property Name="TriggerTypes" Direction="In">
+              <Reference>$Property/TriggerTypes$</Reference>
+            </Property>
+          </Unit>
+        </ComponentImplementation>
+        <ComponentImplementation ID="InternalStateWidget.RainbowBarColumns.Common.DataGridColumnsToPropertyNames.Implementation" TypeId="InternalStateWidget.RainbowBarColumns.Common.DataGridColumnsToPropertyNames" Platform="Wpf, Silverlight" Accessibility="Internal">
+          <Unit>
+            <ContractFactory>Microsoft.EnterpriseManagement.Presentation.Controls.CommonComponents.DataGridColumnsToPropertyNames</ContractFactory>
+          </Unit>
+        </ComponentImplementation>
+      </ComponentImplementations>
+      <ComponentBehaviors>
+        <ComponentBehavior ID="SampleRainbowBarColumnsSummaryDashboard.ComponentBehavior" BehaviorTypeId="Visualization!Microsoft.SystemCenter.Visualization.PersonalizeBehavior" ComponentTypeId="SampleRainbowBarColumnsSummaryDashboard" Accessibility="Internal">
+          <Bindings>
+            <Binding PropertyId="HideConfigurationLaunchPoint">
+              <SimpleValue Type="xsd://boolean" Value="True" />
+            </Binding>
+            <Binding PropertyId="HidePersonalizationLaunchPoint">
+              <SimpleValue Type="xsd://boolean" Value="True" />
+            </Binding>
+          </Bindings>
+        </ComponentBehavior>
+      </ComponentBehaviors>
+    </Presentation>
+    <LanguagePacks>
+      <LanguagePack ID="ENU" IsDefault="true">
+        <DisplayStrings>
+          <DisplayString ElementID="SampleGridLayoutWith2Cells">
+            <Name>2 Cell Grid Layout</Name>
+          </DisplayString>
+          <DisplayString ElementID="SampleRainbowBarColumnsSummaryDashboard">
+            <Name>Sample Rainbow Bar Health Dashboard</Name>
+          </DisplayString>
+          <DisplayString ElementID="SampleDashboardwithRainbowBarColumnsStateWidgetOnly">
+            <Name>Sample Object Health Dashboard w/ RainbowBar Columns</Name>
+            <Description>This Sample Summary Dashboard features a state widget with Rainbow Bar columns created from a column generator component. Each row consist of a monitored server object, total number of its related monitoring objects, how many of these objects are in Critical state, Warning state, Healthy or Not Monitored.</Description>
+          </DisplayString>
+          <DisplayString ElementID="SampleStateWidgetwithRainbowBarColumns">
+            <Name>Windows Server and Related Objects Health</Name>
+          </DisplayString>
+        </DisplayStrings>
+        <KnowledgeArticles></KnowledgeArticles>
+      </LanguagePack>
+    </LanguagePacks>
+  </ManagementPack>
